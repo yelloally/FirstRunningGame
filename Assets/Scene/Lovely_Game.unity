@@ -1138,10 +1138,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FishCollectable
       objectReference: {fileID: 0}
-    - target: {fileID: 5566189741862151639, guid: 6d54055254ee848eea0e822f51d17e07, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d54055254ee848eea0e822f51d17e07, type: 3}
 --- !u!4 &326780590 stripped
@@ -4339,6 +4335,7 @@ MonoBehaviour:
   chunkPrefab:
   - {fileID: 8756466264703593452, guid: 8fcc2eba8ad7e43fa84280d5c7920806, type: 3}
   - {fileID: 2935308956267148559, guid: 8660a163eb66a4d048ca0f2751d2bfd8, type: 3}
+  - {fileID: 2935308956267148559, guid: 16e59dcc80fbe44f0ac3654fadf847f0, type: 3}
   cameraTransform: {fileID: 1739211922}
 --- !u!4 &1126715679
 Transform:

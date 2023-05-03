@@ -11,7 +11,7 @@ public class SaveManager : MonoBehaviour
 
     //fields
     public SaveState save; 
-    private const string saveFileName = "data.ss"; //file name to store the saved data
+    private const string saveFileName = "/data.ss"; //file name to store the saved data
     private BinaryFormatter formatter; //object to serialize/deserializa data
 
     //actions
@@ -33,8 +33,13 @@ public class SaveManager : MonoBehaviour
         {
             //open the save file in read mode and deserialize the data
             FileStream file = new FileStream(Application.persistentDataPath + saveFileName, FileMode.Open, FileAccess.Read);
+            //if you want to find the file path print it like this
+            Debug.Log(Application.persistentDataPath + saveFileName);
+            //where is the visual studio tool bar? how to s
             save = (SaveState)formatter.Deserialize(file);
+            Debug.Log(save.UnlockedHatFlag.Length);
             file.Close();
+            //now in this mode how to get the menu????
             OnLoad?.Invoke(save);
         }
 
