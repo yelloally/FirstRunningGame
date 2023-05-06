@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Advertisements;
 
 public class GameStateDeath : GameState
 {
@@ -65,6 +66,12 @@ public class GameStateDeath : GameState
 
     }
 
+    public void TryResumeGame()
+    {
+        Debug.Log(AdManager.Instance);
+        AdManager.Instance.SgowRewardedAdd();
+    }
+
     public void ResumeGame()
     {
         //transition to the GamestateGame and respawn the player
@@ -79,7 +86,42 @@ public class GameStateDeath : GameState
 
         GameManager.Instance.motor.ResetPlayer();
         GameManager.Instance.worldGeneration.ResetWorld();
-
-       
     }
+
+    public void EnableRevive()
+    {
+        completionCircle.gameObject.SetActive(false);
+    }
+
+    public void OnUnityAdsReady(string placementId)
+    {
+
+    }
+
+    public void OnUnityAdsDidError(string message)
+    {
+        Debug.Log(message);
+    }
+
+    public void OnUnityAdsDidStart(string placementId)
+    {
+
+    }
+
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
+    {
+        completionCircle.gameObject.SetActive(false);
+        switch (showResult)
+        {
+            case ShowResult.Failed:
+                ToMenu();
+                break;
+            case ShowResult.Finished:
+                ResumeGame();
+                break;
+            default:
+                break;
+        }
+    }
+
 }
