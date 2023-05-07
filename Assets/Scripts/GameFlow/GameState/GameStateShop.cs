@@ -16,6 +16,9 @@ public class GameStateShop : GameState
     public Transform hatContainer;
     private Hat[] hats; //array of hats
 
+    //completion circle
+    public Image completionCircle;
+
     public override void Construct()
     {
         GameManager.Instance.ChangeCamera(GameCamera.Shop);
@@ -49,12 +52,16 @@ public class GameStateShop : GameState
             go.transform.GetChild(0).GetComponent<Image>().sprite = hats[index].Thumbnail;
             // ItemName
             go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = hats[index].ItemName;
+
+
             // Price
             //Debug.Log(SaveManager.Instance);
             //Debug.Log(SaveManager.Instance.save);
             //Debug.Log(SaveManager.Instance.save.UnlockedHatFlag);
             if (SaveManager.Instance.save.UnlockedHatFlag != null)
             {
+                Debug.Log("index = " + index + ", hats.Length = " + hats.Length);
+                Debug.Log(SaveManager.Instance.save.UnlockedHatFlag.Length+" "+i);
                 if (SaveManager.Instance.save.UnlockedHatFlag[i] == 0)
                     go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = hats[index].ItemPrice.ToString();
                 else

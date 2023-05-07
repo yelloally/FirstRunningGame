@@ -5,7 +5,7 @@ using System;
 public class SaveState
 {
     //number of different hats that can be unlocked in the game
-    [NonSerialized] private const int HAT_COUNT = 3;
+    [NonSerialized] private const int HAT_COUNT = 12;
 
     //properties to store the highscore and number of fish
     public int Highscore { set; get; }

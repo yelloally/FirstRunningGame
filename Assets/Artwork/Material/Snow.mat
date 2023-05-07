@@ -137,7 +137,7 @@ Material:
     - _Tiling: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _curvature: 0.005
+    - _curvature: 0
     - _tiling: 0
     m_Colors:
     - Vector2_F5E3D7D7: {r: 0, g: -90.02279, b: 0, a: 0}

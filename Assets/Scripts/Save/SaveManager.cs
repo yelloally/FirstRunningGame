@@ -11,7 +11,8 @@ public class SaveManager : MonoBehaviour
 
     //fields
     public SaveState save; 
-    private const string saveFileName = "/data.ss"; //file name to store the saved data
+    private const string saveFileName = "/data_1.ss"; //file name to store the saved data
+    //delete this file and runagaina
     private BinaryFormatter formatter; //object to serialize/deserializa data
 
     //actions
