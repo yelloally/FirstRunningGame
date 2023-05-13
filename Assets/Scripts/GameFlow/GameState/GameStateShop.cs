@@ -10,6 +10,8 @@ public class GameStateShop : GameState
     public TextMeshProUGUI currentHatName;
     public HatLogic hatLogic;
     private bool isInit = false;
+    private int hatCount;
+    private int unlockedHatCount;
 
     //shop item
     public GameObject hatPrefab;
@@ -18,6 +20,7 @@ public class GameStateShop : GameState
 
     //completion circle
     public Image completionCircle;
+    public TextMeshProUGUI completionText;
 
     public override void Construct()
     {
@@ -33,6 +36,8 @@ public class GameStateShop : GameState
 
             isInit = true;
         }
+
+        ResetCompletionCircle();
     }
 
     public override void Destruct()
@@ -67,7 +72,7 @@ public class GameStateShop : GameState
                 else
                 {
                     go.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
-
+                    unlockedHatCount++;
                 }
             }
         }
@@ -95,6 +100,8 @@ public class GameStateShop : GameState
             totalFish.text = SaveManager.Instance.save.Fish.ToString("000");
             SaveManager.Instance.Save();
             hatContainer.GetChild(i).transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+            unlockedHatCount++;
+            ResetCompletionCircle();
 
         }
         //dont have it, cant buy it
@@ -102,8 +109,17 @@ public class GameStateShop : GameState
         {
             Debug.Log("not enough fish to buy it.");
         }
-
     }
+
+    private void ResetCompletionCircle()
+    {
+        int hatCount = hats.Length - 1;
+        int currentlyUnlockedCount = unlockedHatCount - 1;
+
+        completionCircle.fillAmount = (float)currentlyUnlockedCount / (float)hatCount;
+        completionText.text = currentlyUnlockedCount + " / " + hatCount;
+    }
+
 
     public void OnHomeClick()
     {

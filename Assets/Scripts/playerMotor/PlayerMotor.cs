@@ -28,13 +28,14 @@ public class PlayerMotor : MonoBehaviour
     //object
     private bool isPaused;
 
+    public Vector3 startingPos;
+
     //method from tha class MonoBehaviour
     private void Start()
     {
         //get references and initialize state
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-
         state = GetComponent<RunningState>();
         state.Construct();
 
@@ -53,19 +54,41 @@ public class PlayerMotor : MonoBehaviour
     private void UpdateMotor()
     {
         //check if we were grounded
-        isGrounded = controller.isGrounded;
+        if (!slideBack)
+        {
+            isGrounded = controller.isGrounded;
 
-        //how should we moving rn? based on state
-        moveVector = state.ProcessMotion();
+            //how should we moving rn? based on state
+            moveVector = state.ProcessMotion();
 
-        //are we trying to change state?
-        state.Transition();
+            //are we trying to change state?
+            state.Transition();
 
-        //feed animator some values
-        anim?.SetBool("IsGrounded", isGrounded);
-        anim?.SetFloat("Speed", Mathf.Abs(moveVector.z));
+            //feed animator some values
+            anim?.SetBool("IsGrounded", isGrounded);
+            anim?.SetFloat("Speed", Mathf.Abs(moveVector.z));
 
-        //move the player
+            //move the player
+            Debug.Log("ccccc  " + moveVector);
+        }
+        else
+        {
+            moveVector = startingPos;
+            if (Vector3.Distance(transform.position, Vector3.zero) > -0.5f && Vector3.Distance(transform.position, Vector3.zero) < 0.5f)
+            {
+                slideBack = false;
+                moveVector = Vector3.zero;
+                GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<GameStateDeath>());
+                //ResetPlayer();
+                anim?.SetTrigger("Idle");
+                anim?.SetFloat("Speed",0);
+                GameStats.Instance.ResetSession();
+                GameManager.Instance.motor.PausePlayer();
+                //GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<RespawnState>());
+
+            }
+            Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero));
+        }
         controller.Move(moveVector * Time.deltaTime);
     }
     //method
@@ -130,6 +153,13 @@ public class PlayerMotor : MonoBehaviour
         ChangeState(GetComponent<RespawnState>());
         GameManager.Instance.ChangeCamera(GameCamera.Respawn);
     }
+
+    public void SlidePlayer()
+    {
+        ChangeState(GetComponent<SlidingState>());
+        GameManager.Instance.ChangeCamera(GameCamera.Respawn);
+    }
+
     public void ResetPlayer()
     {
         currentLane = 0;
@@ -139,11 +169,23 @@ public class PlayerMotor : MonoBehaviour
         PausePlayer();
     }
 
+    bool slideBack;
+
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
         string hitLayerName = LayerMask.LayerToName(hit.gameObject.layer);
 
         if (hitLayerName == "Death")
-            ChangeState(GetComponent<DeathState>()); 
+            ChangeState(GetComponent<DeathState>());
+
+        if(hit.gameObject.name == "Lava")
+        {
+            Debug.Log("hit Lava");
+            anim?.SetTrigger("Slide");
+            slideBack = true;
+           // Debug.Log(state.ProcessMotion());
+        }
+
     }
+
 }

@@ -1367,6 +1367,7 @@ MonoBehaviour:
   terminalVelocity: 20
   controller: {fileID: 4702772741410818412}
   anim: {fileID: 0}
+  startingPos: {x: 0, y: 0, z: -5}
 --- !u!114 &4702772741410818415
 MonoBehaviour:
   m_ObjectHideFlags: 0
