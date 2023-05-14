@@ -6,6 +6,7 @@ public class GameStateInit : GameState
     public GameObject menuUI;
     [SerializeField] private TextMeshProUGUI hiscoreText;
     [SerializeField] private TextMeshProUGUI fishcountText;
+    [SerializeField] private AudioClip menuLoopMusic;
 
     //change the camera to the initialization camera
     public override void Construct()
@@ -16,6 +17,8 @@ public class GameStateInit : GameState
         fishcountText.text = "Fish: " + SaveManager.Instance.save.Fish.ToString();
 
         menuUI.SetActive(true);
+
+        AudioManager.Instance.PlayMusicWithXFade(menuLoopMusic, 0.5f);
     }
 
     public override void Destruct()

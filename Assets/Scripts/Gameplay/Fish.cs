@@ -19,7 +19,7 @@ public class Fish : MonoBehaviour
 
     private void PickupFish()
     {
-        anim?.SetTrigger("PickUp");
+        anim?.SetTrigger("Pickup");
         GameStats.Instance.CollectFish();
         //incremenrr the fish count 
         //incremenr the score

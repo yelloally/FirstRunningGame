@@ -9,6 +9,7 @@ public class GameStateShop : GameState
     public TextMeshProUGUI totalFish;
     public TextMeshProUGUI currentHatName;
     public HatLogic hatLogic;
+    [SerializeField] private AudioClip buyHat;
     private bool isInit = false;
     private int hatCount;
     private int unlockedHatCount;
@@ -101,6 +102,7 @@ public class GameStateShop : GameState
             SaveManager.Instance.Save();
             hatContainer.GetChild(i).transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
             unlockedHatCount++;
+            AudioManager.Instance.PlaySFX(buyHat, 0.7f);
             ResetCompletionCircle();
 
         }

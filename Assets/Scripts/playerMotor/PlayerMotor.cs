@@ -21,14 +21,16 @@ public class PlayerMotor : MonoBehaviour
     //reference
     //object
     public CharacterController controller;
+    public Vector3 startingPos;
     //jbject
     public Animator anim;
     //object
     private BaseState state;
     //object
     private bool isPaused;
+    bool slideBack;
+    public AudioClip hitSound;
 
-    public Vector3 startingPos;
 
     //method from tha class MonoBehaviour
     private void Start()
@@ -52,6 +54,7 @@ public class PlayerMotor : MonoBehaviour
 
     //method which updates player.s movement checks if the player is on the ground
     private void UpdateMotor()
+
     {
         //check if we were grounded
         if (!slideBack)
@@ -69,7 +72,8 @@ public class PlayerMotor : MonoBehaviour
             anim?.SetFloat("Speed", Mathf.Abs(moveVector.z));
 
             //move the player
-            Debug.Log("ccccc  " + moveVector);
+
+            //Debug.Log("ccccc  " + moveVector);
         }
         else
         {
@@ -169,14 +173,18 @@ public class PlayerMotor : MonoBehaviour
         PausePlayer();
     }
 
-    bool slideBack;
 
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
         string hitLayerName = LayerMask.LayerToName(hit.gameObject.layer);
 
         if (hitLayerName == "Death")
+        {
+            AudioManager.Instance.PlaySFX(hitSound, 0.7f);
             ChangeState(GetComponent<DeathState>());
+        }
+
+        Debug.Log(hit.gameObject.name);
 
         if(hit.gameObject.name == "Lava")
         {

@@ -8,6 +8,7 @@ public class GameStateGame : GameState
     public GameObject gameUI;
     [SerializeField] private TextMeshProUGUI fishCount;
     [SerializeField] private TextMeshProUGUI scoreCount;
+    [SerializeField] private AudioClip gameLoopMusic;
 
     public override void Construct()
     {
@@ -22,6 +23,8 @@ public class GameStateGame : GameState
         GameStats.Instance.OnScoreChange += OnScoreChange;
 
         gameUI.SetActive(true);
+
+        AudioManager.Instance.PlayMusicWithXFade(gameLoopMusic, 0.5f);
     }
 
     //callback for when the player collects fish

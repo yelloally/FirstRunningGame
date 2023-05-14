@@ -36,11 +36,11 @@ public class SaveManager : MonoBehaviour
             FileStream file = new FileStream(Application.persistentDataPath + saveFileName, FileMode.Open, FileAccess.Read);
             //if you want to find the file path print it like this
             Debug.Log(Application.persistentDataPath + saveFileName);
-            //where is the visual studio tool bar? how to s
+            
             save = (SaveState)formatter.Deserialize(file);
 //            Debug.Log(save.UnlockedHatFlag.Length);
             file.Close();
-            //now in this mode how to get the menu????
+           
             OnLoad?.Invoke(save);
         }
 
