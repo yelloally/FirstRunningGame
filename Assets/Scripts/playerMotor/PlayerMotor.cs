@@ -80,6 +80,7 @@ public class PlayerMotor : MonoBehaviour
             moveVector = startingPos;
             if (Vector3.Distance(transform.position, Vector3.zero) > -0.5f && Vector3.Distance(transform.position, Vector3.zero) < 0.5f)
             {
+                
                 slideBack = false;
                 moveVector = Vector3.zero;
                 GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<GameStateDeath>());
@@ -91,7 +92,9 @@ public class PlayerMotor : MonoBehaviour
                 //GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<RespawnState>());
 
             }
-            Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero));
+
+
+            Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero)+" "+slideBack+" "+startingPos);
         }
         controller.Move(moveVector * Time.deltaTime);
     }
@@ -178,13 +181,18 @@ public class PlayerMotor : MonoBehaviour
     {
         string hitLayerName = LayerMask.LayerToName(hit.gameObject.layer);
 
-        if (hitLayerName == "Death")
+        if (hitLayerName == "Death" && !slideBack)
         {
+            Debug.Log("dead");
             AudioManager.Instance.PlaySFX(hitSound, 0.7f);
             ChangeState(GetComponent<DeathState>());
         }
 
-        Debug.Log(hit.gameObject.name);
+        if (slideBack)
+        {
+            hit.gameObject.GetComponent<Collider>().isTrigger = true;
+        }
+  //      Debug.Log(hit.gameObject.name);
 
         if(hit.gameObject.name == "Lava")
         {

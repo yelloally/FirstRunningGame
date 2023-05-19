@@ -39,9 +39,9 @@ public class GameStateDeath : GameState
         SaveManager.Instance.save.Fish += GameStats.Instance.fishCollectedThisSession;
         SaveManager.Instance.Save(); //save the game state
 
-        highScore.text = "Highscore: " + SaveManager.Instance.save.Highscore;
+        highScore.text = " " + SaveManager.Instance.save.Highscore;
         currentScore.text = GameStats.Instance.ScoreToText();
-        fishTotal.text = "Total fish: " + SaveManager.Instance.save.Fish;
+        fishTotal.text = " " + SaveManager.Instance.save.Fish;
         currentFish.text = GameStats.Instance.FishToText();
     }
 
