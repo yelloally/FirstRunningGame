@@ -150,5 +150,5 @@ Material:
     - _offset: {r: 0, g: 0, b: 0, a: 0}
     - _offset_1: {r: 0, g: 0, b: 0, a: 0}
     - _tiling: {r: 15, g: 15, b: 0, a: 0}
-    - snowOffset: {r: 0, g: -1.278564, b: 0, a: 0}
+    - snowOffset: {r: 0, g: -0, b: 0, a: 0}
   m_BuildTextureStacks: []

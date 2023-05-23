@@ -62,6 +62,19 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(UpdateMusicWithXFade(activeSource, newSource, musicClip, transitionTime));
     }
 
+    public void toggleMute()
+    {
+        AudioSource a = GetComponent<AudioSource>();
+        if (a.isPlaying)
+        {
+            a.Pause();
+        }
+        else
+        {
+            a.Play();
+        }
+    }
+
     private IEnumerator UpdateMusicWithXFade(AudioSource original, AudioSource newSource, AudioClip music, float transitionTime)
     {
         //make sure the source is active and playing

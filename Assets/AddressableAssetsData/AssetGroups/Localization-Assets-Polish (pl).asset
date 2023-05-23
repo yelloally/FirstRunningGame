@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Polish (pl)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Polish (pl)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: de92a35c605c645f8aece71b2b535c8c
+  m_SerializeEntries:
+  - m_GUID: 9eaa7cf72294d483b8f583737bbba260
+    m_Address: Flag_of_Poland.svg
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pl
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: c0776454acb794c3ea007be085800196, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e11052258de504f68951f21c6f11b2d6, type: 2}
+    - {fileID: 11400000, guid: 460707e16e91f4cbc92525d0c1e2aced, type: 2}

@@ -29,6 +29,10 @@ MonoBehaviour:
     m_Address: Assets/LocalSettings/Tables/New Table Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
+  - m_GUID: b6e89a0bdd8e74eaaa0bffbfe7f23638
+    m_Address: Assets/LocalSettings/Tables/FlagTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: c0776454acb794c3ea007be085800196, type: 2}
   m_SchemaSet:
