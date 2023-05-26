@@ -17,6 +17,7 @@ public class PlayerMotor : MonoBehaviour
     public float baseSidewaySpeed = 10.0f;
     public float gravity = 14.0f;
     public float terminalVelocity = 20.0f;
+    private int fishCount = 0;
 
     //reference
     //object
@@ -44,9 +45,16 @@ public class PlayerMotor : MonoBehaviour
         isPaused = true; //player is paused at start
     }
 
+    public void changeSize(float size)
+    {
+        transform.localScale = Vector3.one * size;
+    }
+
     //method from the class MonoBehaviour
+    float seconds;
     private void Update()
     {
+        seconds++;
         //only update if not paused
         if (!isPaused)
             UpdateMotor();
@@ -94,10 +102,11 @@ public class PlayerMotor : MonoBehaviour
             }
 
 
-            Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero)+" "+slideBack+" "+startingPos);
+            //Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero)+" "+slideBack+" "+startingPos);
         }
         controller.Move(moveVector * Time.deltaTime);
     }
+
     //method
     public float SnapToLane()
     {
@@ -188,15 +197,23 @@ public class PlayerMotor : MonoBehaviour
             ChangeState(GetComponent<DeathState>());
         }
 
-        if (slideBack)
+        if (slideBack)//this if will execute when pengi hit lava
         {
-            hit.gameObject.GetComponent<Collider>().isTrigger = true;
+                if (hit.gameObject.name != "Lava")
+                {
+                    hit.gameObject.GetComponent<Collider>().isTrigger = true;
+                }
         }
   //      Debug.Log(hit.gameObject.name);
 
         if(hit.gameObject.name == "Lava")
-        {
+        {//Is the fish collecting process working???
+
+            fishCount--;
+            GameStats.Instance.resetFish();
             Debug.Log("hit Lava");
+            startingPos = new Vector3(0, 0, -(seconds / 60));
+            Debug.Log(startingPos+"  "+seconds+" "+Application.targetFrameRate);
             anim?.SetTrigger("Slide");
             slideBack = true;
            // Debug.Log(state.ProcessMotion());

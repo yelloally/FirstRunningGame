@@ -15,7 +15,7 @@ public class GameStateInit : GameState
 
         hiscoreText.text = "Highscore: " + SaveManager.Instance.save.Highscore.ToString();
         fishcountText.text = "Fish: " + SaveManager.Instance.save.Fish.ToString();
-
+        
         menuUI.SetActive(true);
 
         AudioManager.Instance.PlayMusicWithXFade(menuLoopMusic, 0.5f);

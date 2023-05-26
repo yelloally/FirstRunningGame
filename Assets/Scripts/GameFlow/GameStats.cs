@@ -55,6 +55,13 @@ public class GameStats : MonoBehaviour
         AudioManager.Instance.PlaySFX(fishCollectSFX); 
     }
 
+    public void resetFish()
+    {
+        fishCollectedThisSession = 0;
+        OnCollectFish?.Invoke(fishCollectedThisSession);
+        AudioManager.Instance.PlaySFX(fishCollectSFX);
+    }
+
     //reset the game 
     public void ResetSession()
     {
