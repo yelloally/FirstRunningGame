@@ -13,14 +13,14 @@ public class Fish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !GameManager.Instance.motor.slideBack)
             PickupFish(); 
     }
 
     private void PickupFish()
     {
         anim?.SetTrigger("Pickup");
-        GameStats.Instance.CollectFish();
+        GameStats.Instance.CollectFish();//hit command
         //incremenrr the fish count 
         //incremenr the score
         //play sfx

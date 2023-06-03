@@ -13,8 +13,8 @@ public class GameStateInit : GameState
     {
         GameManager.Instance.ChangeCamera(GameCamera.Init);
 
-        hiscoreText.text = "Highscore: " + SaveManager.Instance.save.Highscore.ToString();
-        fishcountText.text = "Fish: " + SaveManager.Instance.save.Fish.ToString();
+        hiscoreText.text = " " + SaveManager.Instance.save.Highscore.ToString();
+        fishcountText.text = " " + SaveManager.Instance.save.Fish.ToString();
         
         menuUI.SetActive(true);
 
@@ -31,6 +31,8 @@ public class GameStateInit : GameState
         brain.ChangeState(GetComponent<GameStateGame>());
         //eeset the game stats for the new session
         GameStats.Instance.ResetSession();
+        GameManager.Instance.motor.locationPoints.Clear();
+        GameManager.Instance.motor.slideBack = false;
         GetComponent<GameStateDeath>().EnableRevive(); 
     }
 

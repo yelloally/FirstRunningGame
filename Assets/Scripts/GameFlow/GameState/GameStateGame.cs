@@ -28,7 +28,7 @@ public class GameStateGame : GameState
     }
 
     //callback for when the player collects fish
-    private void OnCollectFish(int amnCollected)
+    public void OnCollectFish(int amnCollected)
     {
         fishCount.text = GameStats.Instance.FishToText();
     }
@@ -36,7 +36,7 @@ public class GameStateGame : GameState
     //callback for when the player s score changes
     private void OnScoreChange(float score)
     {
-        scoreCount.text = GameStats.Instance.ScoreToText();
+        scoreCount.text = GameStats.Instance.ScoreToText();//play the game
     }
 
     public override void Destruct()

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMotor : MonoBehaviour
@@ -29,13 +31,23 @@ public class PlayerMotor : MonoBehaviour
     private BaseState state;
     //object
     private bool isPaused;
-    bool slideBack;
+    public bool slideBack;
     public AudioClip hitSound;
 
+    public GameObject fish;
+
+    private float timer;
+    private float storeInterval;
+    public List<Vector3> locationPoints;
+    private int currentIndex;
 
     //method from tha class MonoBehaviour
     private void Start()
     {
+        storeInterval = Time.deltaTime;
+        //initialize the list
+        locationPoints = new List<Vector3>();
+
         //get references and initialize state
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
@@ -43,6 +55,8 @@ public class PlayerMotor : MonoBehaviour
         state.Construct();
 
         isPaused = true; //player is paused at start
+
+        currentIndex = 0;
     }
 
     public void changeSize(float size)
@@ -54,7 +68,7 @@ public class PlayerMotor : MonoBehaviour
     float seconds;
     private void Update()
     {
-        seconds++;
+            seconds++;
         //only update if not paused
         if (!isPaused)
             UpdateMotor();
@@ -64,9 +78,26 @@ public class PlayerMotor : MonoBehaviour
     private void UpdateMotor()
 
     {
+        //increment the timer
+        
+
         //check if we were grounded
         if (!slideBack)
         {
+            timer += Time.deltaTime;
+
+            //check if timer exceed store interval
+            if (timer >= storeInterval)
+            {
+                //add the current pos to the list 
+                locationPoints.Add(transform.position);
+
+               // Debug.Log("Added lod points: " + transform.position);
+
+                //reset
+                timer = 0f;
+            }
+
             isGrounded = controller.isGrounded;
 
             //how should we moving rn? based on state
@@ -78,33 +109,12 @@ public class PlayerMotor : MonoBehaviour
             //feed animator some values
             anim?.SetBool("IsGrounded", isGrounded);
             anim?.SetFloat("Speed", Mathf.Abs(moveVector.z));
-
+            controller.Move(moveVector * Time.deltaTime);
             //move the player
 
             //Debug.Log("ccccc  " + moveVector);
         }
-        else
-        {
-            moveVector = startingPos;
-            if (Vector3.Distance(transform.position, Vector3.zero) > -0.5f && Vector3.Distance(transform.position, Vector3.zero) < 0.5f)
-            {
-                
-                slideBack = false;
-                moveVector = Vector3.zero;
-                GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<GameStateDeath>());
-                //ResetPlayer();
-                anim?.SetTrigger("Idle");
-                anim?.SetFloat("Speed",0);
-                GameStats.Instance.ResetSession();
-                GameManager.Instance.motor.PausePlayer();
-                //GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<RespawnState>());
 
-            }
-
-
-            //Debug.Log("mmmm  " +" "+ Vector3.Distance(transform.position, Vector3.zero)+" "+slideBack+" "+startingPos);
-        }
-        controller.Move(moveVector * Time.deltaTime);
     }
 
     //method
@@ -185,6 +195,75 @@ public class PlayerMotor : MonoBehaviour
         PausePlayer();
     }
 
+    private void StartGoingThroughPoints()
+    {
+        if (locationPoints.Count > 0)
+        {
+            //reset the current index
+            currentIndex = 0;
+
+            //start the coroutine 
+            StartCoroutine(MoveThroughPointsCoroutine());
+        }
+        else
+        {
+            Debug.Log("no location points available.");
+        }
+    }
+
+    private IEnumerator MoveThroughPointsCoroutine()
+    {
+        Debug.Log("Moving through points started");
+        int fs = 0;
+        while (currentIndex < locationPoints.Count)
+        {
+            //move the character towards the current point
+            Vector3 targetPosition = locationPoints[currentIndex];
+            Vector3 moveDirection = (targetPosition - transform.position).normalized;
+            float moveSpeed = baseRunSpeed;
+            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+
+            //check if we have reached the current point
+            float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+            if (distanceToTarget <= 0.1f)
+            {
+                fs++;
+                if(fs%60 == 0)
+                {
+                    GameObject f = Instantiate(fish, transform.position, Quaternion.identity);
+                    f.GetComponent<Animator>().SetTrigger("popping");
+                }
+                //move to the next point
+                currentIndex++;
+
+                Debug.Log("Reached point " + fs);
+                yield return new WaitForFixedUpdate(); //add a delay between each point
+            }
+
+            yield return null;
+        }
+
+        Debug.Log("finished moving through points");
+
+        //reset the state
+        currentIndex = 0;
+        locationPoints.Clear();
+        rePosition();
+    }
+
+    public void rePosition()
+    {
+        //moveVector = Vector3.zero;
+        GameManager.Instance.ChangeState(GameManager.Instance.GetComponent<GameStateDeath>());
+        //ResetPlayer();
+        anim?.SetTrigger("Idle");
+        anim?.SetFloat("Speed", 0);
+        controller.Move(Vector3.zero);
+        //reset the game session 
+        GameStats.Instance.ResetSession();
+        //pause playermotor
+        GameManager.Instance.motor.PausePlayer();
+    }
 
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -192,6 +271,7 @@ public class PlayerMotor : MonoBehaviour
 
         if (hitLayerName == "Death" && !slideBack)
         {
+            locationPoints.Clear();
             Debug.Log("dead");
             AudioManager.Instance.PlaySFX(hitSound, 0.7f);
             ChangeState(GetComponent<DeathState>());
@@ -201,7 +281,7 @@ public class PlayerMotor : MonoBehaviour
         {
                 if (hit.gameObject.name != "Lava")
                 {
-                    hit.gameObject.GetComponent<Collider>().isTrigger = true;
+                   // hit.gameObject.GetComponent<Collider>().isTrigger = true;
                 }
         }
   //      Debug.Log(hit.gameObject.name);
@@ -212,11 +292,23 @@ public class PlayerMotor : MonoBehaviour
             fishCount--;
             GameStats.Instance.resetFish();
             Debug.Log("hit Lava");
-            startingPos = new Vector3(0, 0, -(seconds / 60));
-            Debug.Log(startingPos+"  "+seconds+" "+Application.targetFrameRate);
+            //startingPos = new Vector3(0, 0, -(seconds / 60));
+//            Debug.Log(startingPos+"  "+seconds+" "+Application.targetFrameRate);
+
+            //trigger the sliding anim
             anim?.SetTrigger("Slide");
             slideBack = true;
-           // Debug.Log(state.ProcessMotion());
+            // Debug.Log(state.ProcessMotion());
+
+            //reverse the order of loc points
+            locationPoints.Reverse();
+            //start going throgh the points again
+            StartGoingThroughPoints();
+            //print out pos
+            foreach (Vector3 p in locationPoints)
+            {
+                Debug.Log("posssss   "+p);
+            }
         }
 
     }
