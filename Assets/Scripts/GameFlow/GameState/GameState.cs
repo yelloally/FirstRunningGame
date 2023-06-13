@@ -12,7 +12,7 @@ public abstract class GameState : MonoBehaviour
     public virtual void Construct()
     {
         brain = GetComponent<GameManager>();
-//        Debug.Log("Constructing : " + this.ToString());
+        Debug.Log("Constructing : " + this.ToString());
     }
 
     public virtual void Destruct()

@@ -6874,8 +6874,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstChunkSpawnPosition: 15
-  chunkOnScreen: 7
-  despawnDistance: 5
+  chunkOnScreen: 5
+  despawnDistance: 50
   chunkPrefab:
   - {fileID: 4131420594646783220, guid: b5e295d6395d8f34f8ef6ce787039795, type: 3}
   - {fileID: 4115433306941779013, guid: df9874ae7de0ba5418de868d65de0eb5, type: 3}
@@ -6914,18 +6914,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e958f3f9fb5549119ca4965f74f4e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstChunkSpawnPosition: 20
-  chunkOnScreen: 8
-  despawnDistance: 5
+  firstChunkSpawnPosition: 10
+  chunkOnScreen: 5
+  despawnDistance: 3
   chunkPrefab:
   - {fileID: 5030397984251240675, guid: 4a0f99e35c88c4050a492e6ea3bbd2c4, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
-  - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
   - {fileID: 4588603283644659402, guid: 78a22b7bb97a74116a32b2ad3dc1ecaa, type: 3}
   cameraTransform: {fileID: 1739211922}
 --- !u!1 &1135355703
@@ -11486,6 +11479,37 @@ RectTransform:
   m_AnchoredPosition: {x: 768, y: -762.5}
   m_SizeDelta: {x: 100, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1905803590
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1905803591}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1905803591
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905803590}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.2736673, y: 8.74668, z: -5.907586}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1929743754
 GameObject:
   m_ObjectHideFlags: 0
@@ -12521,7 +12545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   motor: {fileID: 986955848}
   worldGeneration: {fileID: 1126715678}
-  sceneChunkGeneration: {fileID: 0}
+  sceneChunkGeneration: {fileID: 1126715680}
   cameras:
   - {fileID: 281352338}
   - {fileID: 692838087}
@@ -13156,6 +13180,10 @@ PrefabInstance:
       propertyPath: hitSound
       value: 
       objectReference: {fileID: 8300000, guid: b7aa83fa86b5d456fa2724093bbbcd0c, type: 3}
+    - target: {fileID: 4702772741410818414, guid: 0395a6a1d55b544599bab4710027492e, type: 3}
+      propertyPath: startingPos.z
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 6385540640441875950, guid: 0395a6a1d55b544599bab4710027492e, type: 3}
       propertyPath: m_IsActive
       value: 0

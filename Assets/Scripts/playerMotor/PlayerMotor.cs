@@ -59,7 +59,7 @@ public class PlayerMotor : MonoBehaviour
         currentIndex = 0;
     }
 
-    public void changeSize(float size)
+    public void ChangeSize(float size)
     {
         transform.localScale = Vector3.one * size;
     }
@@ -68,7 +68,7 @@ public class PlayerMotor : MonoBehaviour
     float seconds;
     private void Update()
     {
-            seconds++;
+        seconds++;
         //only update if not paused
         if (!isPaused)
             UpdateMotor();
@@ -78,9 +78,6 @@ public class PlayerMotor : MonoBehaviour
     private void UpdateMotor()
 
     {
-        //increment the timer
-        
-
         //check if we were grounded
         if (!slideBack)
         {
@@ -92,12 +89,18 @@ public class PlayerMotor : MonoBehaviour
                 //add the current pos to the list 
                 locationPoints.Add(transform.position);
 
-               // Debug.Log("Added lod points: " + transform.position);
+                if (locationPoints.Count == 200)
+                {
+                    locationPoints.RemoveRange(0, 100);
+                }
 
                 //reset
                 timer = 0f;
+                foreach (Vector3 p in locationPoints)
+                {
+                    Debug.Log("posssss   " + p);
+                }
             }
-
             isGrounded = controller.isGrounded;
 
             //how should we moving rn? based on state
@@ -110,9 +113,6 @@ public class PlayerMotor : MonoBehaviour
             anim?.SetBool("IsGrounded", isGrounded);
             anim?.SetFloat("Speed", Mathf.Abs(moveVector.z));
             controller.Move(moveVector * Time.deltaTime);
-            //move the player
-
-            //Debug.Log("ccccc  " + moveVector);
         }
 
     }
@@ -123,7 +123,7 @@ public class PlayerMotor : MonoBehaviour
         float r = 0.0f;
 
         //if we're not directly on top of a lane
-        if (transform.position.x != (currentLane * distanceInBetweenLanes)) 
+        if (transform.position.x != (currentLane * distanceInBetweenLanes))
         {
             //calculate the distance to desired position
             float deltaToDesiredPosition = (currentLane * distanceInBetweenLanes) - transform.position.x;
@@ -136,7 +136,7 @@ public class PlayerMotor : MonoBehaviour
             if (Mathf.Abs(actualDistance) > Mathf.Abs(deltaToDesiredPosition))
                 r = deltaToDesiredPosition * (1 / Time.deltaTime);
 
-            
+
         }
         else
         {
@@ -150,7 +150,7 @@ public class PlayerMotor : MonoBehaviour
     //to change player lane
     public void ChangeLane(int direction)
     {
-        currentLane = Mathf.Clamp( currentLane + direction, -1, 1);
+        currentLane = Mathf.Clamp(currentLane + direction, -1, 1);
     }
     //function to change player lane
     public void ChangeState(BaseState s)
@@ -175,7 +175,7 @@ public class PlayerMotor : MonoBehaviour
         isPaused = false;
     }
     public void RespawnPlayer()
-    { 
+    {
         ChangeState(GetComponent<RespawnState>());
         GameManager.Instance.ChangeCamera(GameCamera.Respawn);
     }
@@ -223,12 +223,14 @@ public class PlayerMotor : MonoBehaviour
             float moveSpeed = baseRunSpeed;
             controller.Move(moveDirection * moveSpeed * Time.deltaTime);
 
+            Debug.Log(targetPosition);
+
             //check if we have reached the current point
             float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
             if (distanceToTarget <= 0.1f)
             {
                 fs++;
-                if(fs%60 == 0)
+                if (fs % 10 == 0)
                 {
                     GameObject f = Instantiate(fish, transform.position, Quaternion.identity);
                     f.GetComponent<Animator>().SetTrigger("popping");
@@ -266,7 +268,7 @@ public class PlayerMotor : MonoBehaviour
     }
 
     public void OnControllerColliderHit(ControllerColliderHit hit)
-    {
+    { 
         string hitLayerName = LayerMask.LayerToName(hit.gameObject.layer);
 
         if (hitLayerName == "Death" && !slideBack)
@@ -277,28 +279,16 @@ public class PlayerMotor : MonoBehaviour
             ChangeState(GetComponent<DeathState>());
         }
 
-        if (slideBack)//this if will execute when pengi hit lava
+        if (hit.gameObject.name == "Lava")
         {
-                if (hit.gameObject.name != "Lava")
-                {
-                   // hit.gameObject.GetComponent<Collider>().isTrigger = true;
-                }
-        }
-  //      Debug.Log(hit.gameObject.name);
-
-        if(hit.gameObject.name == "Lava")
-        {//Is the fish collecting process working???
-
+            //Is the fish collecting process working???
             fishCount--;
             GameStats.Instance.resetFish();
             Debug.Log("hit Lava");
-            //startingPos = new Vector3(0, 0, -(seconds / 60));
-//            Debug.Log(startingPos+"  "+seconds+" "+Application.targetFrameRate);
 
             //trigger the sliding anim
             anim?.SetTrigger("Slide");
             slideBack = true;
-            // Debug.Log(state.ProcessMotion());
 
             //reverse the order of loc points
             locationPoints.Reverse();
@@ -307,7 +297,7 @@ public class PlayerMotor : MonoBehaviour
             //print out pos
             foreach (Vector3 p in locationPoints)
             {
-                Debug.Log("posssss   "+p);
+                Debug.Log("posssss   " + p);
             }
         }
 

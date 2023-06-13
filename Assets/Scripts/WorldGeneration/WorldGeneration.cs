@@ -1,4 +1,4 @@
- using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGeneration : MonoBehaviour
@@ -11,6 +11,8 @@ public class WorldGeneration : MonoBehaviour
     private Queue<Chunk> activeChunks = new Queue<Chunk>();
     //keep in memory, to reuse yhem in future
     private List<Chunk> chunkPool = new List<Chunk>();
+    private float playerDistance;
+
 
     //CONFIGURABLE FIELDS
     [SerializeField] private int firstChunkSpawnPosition = -10;
@@ -27,10 +29,10 @@ public class WorldGeneration : MonoBehaviour
     {
         ResetWorld();
     }
-    
+
 
     //beginning of the game
-    private void Start() 
+    private void Start()
     {
         //check if we have an empty chunkPrefab list
         if (chunkPrefab.Count == 0)
@@ -47,7 +49,7 @@ public class WorldGeneration : MonoBehaviour
         }
     }
 
-    
+
 
     //looking for the camera position, and its going to keep asking camera
     //are we far enough to the pont camera when we need to spawn a new chunk 
@@ -64,7 +66,8 @@ public class WorldGeneration : MonoBehaviour
             SpawnNewChunk();
             DeleteLastChunk();
         }
-        
+
+        playerDistance = cameraZ;
     }
 
     //we need it when the last chunk behind us and we need to spawn new one so
@@ -92,6 +95,7 @@ public class WorldGeneration : MonoBehaviour
         //store the value, to reuse in our pool
         activeChunks.Enqueue(chunk);
         chunk.ShowChunk();
+
     }
 
     //going to take the first chunk (the one we just passed), and make sure to
@@ -101,10 +105,23 @@ public class WorldGeneration : MonoBehaviour
         //picks the first one we put, so that the oldest remowves from the list
         //at the same time as it removes it also gives a reference
         Chunk chunk = activeChunks.Dequeue();
-        chunk.HideChunk();
-        chunkPool.Add(chunk);
-    }
 
+        //сheck the player distance and delete chunks accordingly
+        if (playerDistance >= 100f && chunk.transform.position.z <= playerDistance - 100f)
+        {
+            Destroy(chunk.gameObject);
+        }
+        else if (playerDistance >= 50f && chunkSpawnZ <= playerDistance - 50f)
+        {
+            Destroy(chunk.gameObject);
+        }
+        else
+        {
+            chunk.HideChunk();
+            chunkPool.Add(chunk);
+        }
+
+    }
     //function for resetting the whole thing ,when we die or when we want
     //to play again 
     public void ResetWorld()
